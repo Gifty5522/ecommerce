@@ -9,6 +9,7 @@ public class TC_Luma_Purchase_Product {
 
   @BeforeMethod
   public void beforeMethod() {
+	  System.out.println("PRE");
   }
   
   @Test

@@ -22,12 +22,18 @@ public class TC_Luma_Purchase_Product {
 		BaseClass basePage = new BaseClass();
 		driver = basePage.loadURL(url);
 		lumaPage = new LumaPage(driver);
-		
+		lumaPage.registerUser();
+	    //login();
 	}
   
   @Test
   public void purchaseAProduct() throws InterruptedException {
-	  lumaPage.orderProcessing();
+	  //lumaPage.orderProcessing();
+	  lumaPage.menuSelection();
+	  lumaPage.selectAProduct();
+	  lumaPage.shpooingCart();
+	  lumaPage.orderProduct();
+	  lumaPage.placeOrder();
   }
 
   @AfterMethod

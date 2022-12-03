@@ -58,16 +58,6 @@ public class LumaPage {
 	By continueButton = By.xpath(".//*[text()='Continue Shopping']");
 	
 	By orderID = By.xpath(".//div[@class='checkout-success']/p/a");
-
-	public void orderProcessing() throws InterruptedException {
-		registerUser();
-		//login();
-		menuSelection();
-		selectAProduct();
-		shpooingCart();
-		orderProduct();
-		placeOrder();
-	}
 	
 	public void registerUser() throws InterruptedException{
 		driver.findElement(createAccount).click();

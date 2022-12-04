@@ -1,5 +1,6 @@
 package page;
 
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import ecommerce.luma.BaseClass;
 import ecommerce.luma.HelperClass;
+import logs.TestExecutionProp;
 
 public class LumaPage {
 
@@ -18,6 +20,7 @@ public class LumaPage {
 	WebDriverWait wait = null;
 	HelperClass helperClass = null;
 	Actions actions = null;
+	private final Logger APP_LOGS = TestExecutionProp.getTestExecutionLogsProperties();
 	
 	public LumaPage(WebDriver driver) {
 		this.driver = driver;
@@ -60,14 +63,15 @@ public class LumaPage {
 	By orderID = By.xpath(".//div[@class='checkout-success']/p/a");
 	
 	public void registerUser() throws InterruptedException{
+		APP_LOGS.info("User Registration Started.....");
 		driver.findElement(createAccount).click();
 		driver.findElement(fName).sendKeys("Gifty");
 		driver.findElement(lName).sendKeys("Chabbra");
-		driver.findElement(email).sendKeys("giftychabbra33@gmail.com");
+		driver.findElement(email).sendKeys("giftychabbra35@gmail.com");
 		driver.findElement(pwd).sendKeys("Gifty5522@");
 		driver.findElement(cofirmPWD).sendKeys("Gifty5522@");
 		driver.findElement(submitButton).submit();
-		System.out.println("User has Registered Successfully.");
+		APP_LOGS.info("User has Registered Successfully.....");
 	}
 	
 	public void login() {
@@ -79,15 +83,18 @@ public class LumaPage {
 	}
 	
 	public void menuSelection(){
+		APP_LOGS.info("Menu Selection started.....");
 		wait.until(ExpectedConditions.elementToBeClickable(selectMenu));
 		WebElement menu = driver.findElement(selectMenu);
 		actions.moveToElement(menu).build().perform();
 		WebElement subMenu = driver.findElement(topMenu);
 		actions.moveToElement(subMenu).build().perform();
 		driver.findElement(jacket).click();
+		APP_LOGS.info("Done with the menu selection.....");
 	}
 	
 	public void selectAProduct() throws InterruptedException{
+		APP_LOGS.info("Product Selection started.....");
 		wait.until(ExpectedConditions.elementToBeClickable(selectMenu));
 		driver.findElement(selectSize).click();
 		driver.findElement(selectColor).click();
@@ -96,9 +103,11 @@ public class LumaPage {
 		Thread.sleep(2000);
 		wait.until(ExpectedConditions.visibilityOf(driver.findElement(shoppingList)));
 		wait.until(ExpectedConditions.elementToBeClickable(shoppingList));
+		APP_LOGS.info("Done with Product Selection.....");
 	}
 	
-	public void shpooingCart() throws InterruptedException{
+	public void shoppingCart() throws InterruptedException{
+		APP_LOGS.info("Shopping Cart.....");
 		driver.findElement(shoppingList).click();
 		wait.until(ExpectedConditions.elementToBeClickable(checkout));
 		driver.findElement(checkout).click();
@@ -106,6 +115,7 @@ public class LumaPage {
 	}
 	
 	public void orderProduct() throws InterruptedException{
+		APP_LOGS.info("Order a product process started.....");
 		driver.findElement(address).sendKeys("Jogeshwari");
 		driver.findElement(city).sendKeys("Mumbai");
 		new Select(driver.findElement(selectCountry)).selectByVisibleText("India");
@@ -114,14 +124,17 @@ public class LumaPage {
 		driver.findElement(telephone).sendKeys("+918088350932");
 		Thread.sleep(5000);
 		driver.findElement(nextButton).click();
+		APP_LOGS.info("Done with order a product.....");
 	}
 	
 	public void placeOrder() throws InterruptedException{
+		APP_LOGS.info("Placing a order process started.....");
 		Thread.sleep(5000);
 		wait.until(ExpectedConditions.elementToBeClickable(placeOrder));
 		driver.findElement(placeOrder).click();
 		wait.until(ExpectedConditions.elementToBeClickable(continueButton));
 		String orderId = driver.findElement(orderID).getText();
-		System.out.println("ORDER ID : " + orderId);
+		APP_LOGS.info("Your Order ID is : " + orderId);
+		APP_LOGS.info("Done with the order placing.....");
 	}
 }

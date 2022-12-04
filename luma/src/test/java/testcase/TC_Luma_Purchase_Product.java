@@ -12,6 +12,7 @@ import org.testng.annotations.Parameters;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 
 public class TC_Luma_Purchase_Product {
 	
@@ -41,7 +42,7 @@ public class TC_Luma_Purchase_Product {
 	  lumaPage.placeOrder();
   }
 
-  @AfterMethod
+  @AfterSuite
   public void afterMethod() {
 	  APP_LOGS.info("Inside After Test - closing");
 	  driver.close();

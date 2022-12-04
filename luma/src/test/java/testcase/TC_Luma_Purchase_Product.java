@@ -3,6 +3,7 @@ package testcase;
 import org.testng.annotations.Test;
 
 import ecommerce.luma.BaseClass;
+import ecommerce.luma.HelperClass;
 import logs.TestExecutionProp;
 import page.LumaPage;
 
@@ -23,11 +24,11 @@ public class TC_Luma_Purchase_Product {
 	@Parameters({ "url" })
 	public void setUp(String url) throws InterruptedException {
 		APP_LOGS.info("Inside Before Test - Setup");
+		HelperClass hp = new HelperClass();
 		BaseClass basePage = new BaseClass();
 		driver = basePage.loadURL(url);
 		lumaPage = new LumaPage(driver);
 		lumaPage.registerUser();
-	    //login();
 	}
   
   @Test

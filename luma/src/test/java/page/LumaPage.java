@@ -1,9 +1,10 @@
 package page;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -11,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import ecommerce.luma.BaseClass;
 import ecommerce.luma.HelperClass;
+import ecommerce.luma.lumaConstantLib;
 import logs.TestExecutionProp;
 
 public class LumaPage {
@@ -20,6 +22,7 @@ public class LumaPage {
 	WebDriverWait wait = null;
 	HelperClass helperClass = null;
 	Actions actions = null;
+	List<String> userDetails = null;
 	private final Logger APP_LOGS = TestExecutionProp.getTestExecutionLogsProperties();
 	
 	public LumaPage(WebDriver driver) {
@@ -28,6 +31,7 @@ public class LumaPage {
 		this.helperClass = new HelperClass();
 		wait = BaseClass.waitInstance(driver, 20);
 		actions = new Actions(driver);
+		userDetails = helperClass.getUserDetails();
 	}
 	
 	By createAccount = By.xpath(".//div[@class='panel header']/descendant::a[text()='Create an Account']");
@@ -47,6 +51,7 @@ public class LumaPage {
 	By addToCart = By.xpath(".//a[contains(text(),'Olivia')]/parent::strong/following-sibling::div/descendant::span[text()='Add to Cart']");
 	By shoppingList = By.xpath(".//a[text()='shopping cart']");
 	By checkout = By.xpath(".//span[text()='Proceed to Checkout']");
+	By itemCart = By.xpath(".//span[text()='Item in Cart']");
 	By address = By.xpath(".//input[@name='street[0]']");
 	By city = By.xpath(".//input[@name='city']");
 	By zipCode = By.xpath(".//input[@name='postcode']");
@@ -65,30 +70,20 @@ public class LumaPage {
 	public void registerUser() throws InterruptedException{
 		APP_LOGS.info("User Registration Started.....");
 		driver.findElement(createAccount).click();
-		driver.findElement(fName).sendKeys("Gifty");
-		driver.findElement(lName).sendKeys("Chabbra");
-		driver.findElement(email).sendKeys("giftychabbra35@gmail.com");
-		driver.findElement(pwd).sendKeys("Gifty5522@");
-		driver.findElement(cofirmPWD).sendKeys("Gifty5522@");
+		driver.findElement(fName).sendKeys(userDetails.get(0));
+		driver.findElement(lName).sendKeys(userDetails.get(1));
+		driver.findElement(email).sendKeys(userDetails.get(2));
+		driver.findElement(pwd).sendKeys(lumaConstantLib.PASSWORD);
+		driver.findElement(cofirmPWD).sendKeys(lumaConstantLib.PASSWORD);
 		driver.findElement(submitButton).submit();
 		APP_LOGS.info("User has Registered Successfully.....");
-	}
-	
-	public void login() {
-		//remove this method once API is calling
-		driver.findElement(By.xpath(".//div[@class='panel header']/descendant::a[contains(text(),'Sign In')]")).click();
-		driver.findElement(By.xpath(".//*[@id='email']")).sendKeys("giftychabbra33@gmail.com");
-		driver.findElement(By.xpath(".//*[@title='Password']")).sendKeys("Gifty5522@");
-		driver.findElement(By.xpath(".//*[text()='If you have an account, sign in with your email address.']/parent::fieldset/descendant::span[text()='Sign In']")).click();
 	}
 	
 	public void menuSelection(){
 		APP_LOGS.info("Menu Selection started.....");
 		wait.until(ExpectedConditions.elementToBeClickable(selectMenu));
-		WebElement menu = driver.findElement(selectMenu);
-		actions.moveToElement(menu).build().perform();
-		WebElement subMenu = driver.findElement(topMenu);
-		actions.moveToElement(subMenu).build().perform();
+		actions.moveToElement(driver.findElement(selectMenu)).build().perform();
+		actions.moveToElement(driver.findElement(topMenu)).build().perform();
 		driver.findElement(jacket).click();
 		APP_LOGS.info("Done with the menu selection.....");
 	}
@@ -100,7 +95,7 @@ public class LumaPage {
 		driver.findElement(selectColor).click();
 		Thread.sleep(1000);
 		driver.findElement(addToCart).click();
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 		wait.until(ExpectedConditions.visibilityOf(driver.findElement(shoppingList)));
 		wait.until(ExpectedConditions.elementToBeClickable(shoppingList));
 		APP_LOGS.info("Done with Product Selection.....");
@@ -111,17 +106,19 @@ public class LumaPage {
 		driver.findElement(shoppingList).click();
 		wait.until(ExpectedConditions.elementToBeClickable(checkout));
 		driver.findElement(checkout).click();
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 	}
 	
 	public void orderProduct() throws InterruptedException{
 		APP_LOGS.info("Order a product process started.....");
-		driver.findElement(address).sendKeys("Jogeshwari");
-		driver.findElement(city).sendKeys("Mumbai");
-		new Select(driver.findElement(selectCountry)).selectByVisibleText("India");
-		new Select(driver.findElement(selectRegion)).selectByVisibleText("Maharashtra");
-		driver.findElement(zipCode).sendKeys("123456");
-		driver.findElement(telephone).sendKeys("+918088350932");
+		wait.until(ExpectedConditions.elementToBeClickable(itemCart));
+		driver.findElement(itemCart).click();
+		driver.findElement(address).sendKeys(userDetails.get(3));
+		driver.findElement(city).sendKeys(lumaConstantLib.CITY);
+		new Select(driver.findElement(selectCountry)).selectByVisibleText(lumaConstantLib.COUNTRY);
+		new Select(driver.findElement(selectRegion)).selectByVisibleText(lumaConstantLib.STATE);
+		driver.findElement(zipCode).sendKeys(lumaConstantLib.ZIPCODE);
+		driver.findElement(telephone).sendKeys(userDetails.get(4));
 		Thread.sleep(5000);
 		driver.findElement(nextButton).click();
 		APP_LOGS.info("Done with order a product.....");
